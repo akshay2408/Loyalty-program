@@ -1,3 +1,3 @@
 class Reward < ApplicationRecord
-  belongs_to :user_reward
+  has_many :user_rewards
 end

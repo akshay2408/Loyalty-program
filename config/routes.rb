@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   root to: 'home#index'
+  get 'rewards', to: 'home#rewards'
   resources :rewards
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)

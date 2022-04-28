@@ -1,12 +1,16 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
-
+  devise :database_authenticatable, :registerable, :rememberable        
   has_many :invoices, :dependent => :destroy
   has_many :points, :dependent => :destroy
-  belongs_to :admin_user
-  #validates :phone_number, presence: true, numericality:{ message: ' 10 digits number' }
-  attr_accessor :name, :birth_date, :phone_number, :email 
+  has_many :user_rewards
+  has_many :rewards, through: :user_rewards
+  has_many :user_loyalties
+  has_many :loyalties, through: :user_loyalties
+
+  after_create :standard_tier_customer
+
+  def standard_tier_customer
+    loyalty = Loyalty.find_by_scope("0 points")
+    self.user_loyalties.create!(loyalty: loyalty)
+  end
 end

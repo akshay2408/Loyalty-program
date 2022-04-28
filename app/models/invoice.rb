@@ -1,20 +1,23 @@
 class Invoice < ApplicationRecord
-  STATUS_DRAFT = 'draft'
-  STATUS_PAID  = 'paid'
-
   belongs_to :user
 
-  validates :status, :inclusion => { :in => [STATUS_PAID, STATUS_DRAFT], :message => "You need to pick one status." }
-  attr_accessor :user_id, :status, :due_date
+  after_create :create_point, :spend_more_then_1000 
+  after_create :assign_tier
   
-  class << self
-    def suggest_code
-      invoice = order('created_at desc').limit(1).first
-      if invoice
-        "INV-#{invoice.id + 1}"
-      else
-        "INV-1"
-      end
-    end 
+  def create_point
+    cal_score = foreign ? (amount / 5.0) : (amount / 10.0)
+    
+    user.points.create!(score: cal_score)
+  end
+
+  def spend_more_then_1000
+    if amount >= 1000
+      reward = Reward.find_by_scope("spending more then 1000")
+      user.user_rewards.create!(reward: reward)
+    end   
+  end 
+  
+  def assign_tier
+    AssignTierJob.perform_later user_id
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_27_175101) do
+ActiveRecord::Schema.define(version: 2022_04_28_150748) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,36 +42,52 @@ ActiveRecord::Schema.define(version: 2022_04_27_175101) do
   end
 
   create_table "invoices", force: :cascade do |t|
-    t.string "user_id"
+    t.bigint "user_id"
     t.integer "amount"
-    t.string "invoice_name"
+    t.boolean "foreign", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "status"
-    t.datetime "due_date"
-    t.integer "admin_user_id"
+    t.index ["user_id"], name: "index_invoices_on_user_id"
+  end
+
+  create_table "loyalties", force: :cascade do |t|
+    t.string "name"
+    t.string "scope"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "points", force: :cascade do |t|
-    t.string "user_id"
+    t.bigint "user_id"
     t.integer "score"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_points_on_user_id"
   end
 
   create_table "rewards", force: :cascade do |t|
-    t.string "reward_name"
-    t.string "reward_scope"
+    t.string "name"
+    t.string "scope"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "user_rewards", force: :cascade do |t|
-    t.string "user_id"
-    t.string "reward_id"
-    t.string "reward_name"
+  create_table "user_loyalties", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "loyalty_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["loyalty_id"], name: "index_user_loyalties_on_loyalty_id"
+    t.index ["user_id"], name: "index_user_loyalties_on_user_id"
+  end
+
+  create_table "user_rewards", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "reward_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reward_id"], name: "index_user_rewards_on_reward_id"
+    t.index ["user_id"], name: "index_user_rewards_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|

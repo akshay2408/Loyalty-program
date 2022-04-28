@@ -1,0 +1,16 @@
+<table>
+  <thead>
+    <tr>
+      <td>#</td>
+      <td>Name</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @rewards.each_with_index do |reward, i| %>
+      <tr>
+        <td><%= i+1 %></td>
+        <td><%= reward.name %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

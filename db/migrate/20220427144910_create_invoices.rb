@@ -1,9 +1,9 @@
 class CreateInvoices < ActiveRecord::Migration[5.2]
   def change
     create_table :invoices do |t|
-      t.string :user_id
+      t.references :user
       t.integer :amount
-      t.string :invoice_name
+      t.boolean :foreign, default: false, null: false
 
       t.timestamps
     end

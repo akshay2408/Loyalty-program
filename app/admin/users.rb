@@ -1,51 +1,18 @@
 ActiveAdmin.register User do
-  filter :name
-  filter :email
-  
-  index do
-    column :name
-    column :email do |user|
-      if user.email 
-        mail_to user.email, user.email 
-      else 
-        "-"
-      end
-    end
-    column :phone_number
-    column do |user|
-      link_to("Details", admin_user_path(user)) + " | " + \
-      link_to("Delete", admin_user_path(user), :method => :delete, :confirm => "Are you sure?")
-    end
-  end
-  
-  show :title => :name do
-    panel "user Details" do
-      attributes_table_for user do
-        row("Name") { user.name }
-        row("Email") { mail_to user.email }
-        row("Phone") { user.phone_number }
-      end
-    end
-  end
 
-  form do |f|
-    f.inputs "user" do
-      f.input :name
-      f.input :email
-      f.input :phone_number
-    end
-    f.button
-  end
-
-  sidebar "Total Billed", :only => :show do
-    h1 number_to_currency(Invoice.where(:user_id => user.id).all.sum(&:total)), :style => "text-align: center; margin-top: 20px;"
-  end
-  
-  sidebar "Latest Invoices", :only => :show do
-    table_for Invoice.where(:user_id => user.id).order('created_at desc').limit(5).all do |t|
-      t.column("Status") { |invoice| status_tag invoice.status, invoice.status_tag }
-      t.column("Total") { |invoice| number_to_currency invoice.total }
-    end
-  end
+  # See permitted parameters documentation:
+  # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
+  #
+  # Uncomment all parameters which should be permitted for assignment
+  #
+  # permit_params :email, :encrypted_password, :reset_password_token, :reset_password_sent_at, :remember_created_at, :name, :phone_number, :birth_date
+  #
+  # or
+  #
+  # permit_params do
+  #   permitted = [:email, :encrypted_password, :reset_password_token, :reset_password_sent_at, :remember_created_at, :name, :phone_number, :birth_date]
+  #   permitted << :other if params[:action] == 'create' && current_user.admin?
+  #   permitted
+  # end
   
 end

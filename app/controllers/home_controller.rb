@@ -3,4 +3,8 @@ class HomeController < ApplicationController
   def index
 
   end
+
+  def rewards
+    @rewards = current_user.rewards
+  end
 end
