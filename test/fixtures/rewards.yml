@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  points: 1
+  rewards: MyString
+  user_id: MyString
+
+two:
+  points: 1
+  rewards: MyString
+  user_id: MyString
